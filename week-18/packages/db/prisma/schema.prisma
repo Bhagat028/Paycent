@@ -5,8 +5,9 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider             = "prisma-client"
+  output               = "../generated/prisma"
+  importFileExtension  = "ts"
 }
 
 datasource db {
@@ -15,7 +16,7 @@ datasource db {
 }
 
 model User {
- id Int @id @default(@autoincrement())
+  id Int @id @default(autoincrement())
   age Int 
   name String
   password String

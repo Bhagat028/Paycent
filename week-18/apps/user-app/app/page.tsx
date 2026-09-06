@@ -1,9 +1,8 @@
-import Image, { type ImageProps } from "next/image";
-import { Button } from "@repo/ui/button";
-import styles from "./page.module.css";
+import {PrismaClient} from "@repo/db/client"
 
+const client = new PrismaClient()
 
-export default function Home(): JSX.Element {
+export default function Home() {
   return (
     <div className="text-2xl">
       hi there

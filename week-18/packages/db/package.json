@@ -1,12 +1,27 @@
 {
   "name": "@repo/db",
   "version": "1.0.0",
+  "private": true,
   "description": "",
-  "main": "index.js",
+  "main": "./index.ts",
+  "types": "./index.ts",
   "scripts": {
+    "generate": "prisma generate",
+    "migrate:dev": "prisma migrate dev",
+    "studio": "prisma studio",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "6.18.0"
+  },
+  "devDependencies": {
+    "dotenv": "16.0.3",
+    "prisma": "6.18.0"
+  },
+  "exports": {
+    "./client": "./index.ts"
+  }
 }
