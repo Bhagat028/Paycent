@@ -11,15 +11,21 @@
     "check-types": "next typegen && tsc --noEmit"
   },
   "dependencies": {
+    "@repo/db": "*",
+    "@repo/store": "*",
     "@repo/ui": "*",
+    "bcrypt": "^6.0.0",
     "next": "16.3.4",
+    "next-auth": "^4.24.15",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "recoil": "^0.7.7"
   },
   "devDependencies": {
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
     "@tailwindcss/postcss": "^4.3.3",
+    "@types/bcrypt": "^6.0.0",
     "@types/node": "26.4.1",
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.5",
