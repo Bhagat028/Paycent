@@ -6,7 +6,6 @@ const clint = new PrismaClient()
 export const GET = async() => {
     await clint.user.create({
          data:{
-            age: 12 ,
             name:"test",
             number: `test-${Date.now()}`,
             password:"test-placeholder"
