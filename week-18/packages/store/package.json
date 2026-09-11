@@ -1,0 +1,24 @@
+{
+  "name": "@repo/store",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts",
+    "./useBalance": "./src/hooks/useBalance.ts",
+    "./*": "./src/*.ts"
+  },
+  "scripts": {
+    "lint": "eslint . --max-warnings 0",
+    "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "react": "19.2.8",
+    "recoil": "^0.7.7"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "*",
+    "@repo/typescript-config": "*",
+    "@types/react": "19.2.18",
+    "typescript": "7.0.2"
+  }
+}
