@@ -1,5 +1,6 @@
 import db from "@repo/db/client";
 import CredentialsProvider from "next-auth/providers/credentials"
+import GoogleProvider from "next-auth/providers/google"
 import bcrypt from "bcrypt";
 
 export const authOptions = {
@@ -20,6 +21,9 @@ export const authOptions = {
             });
 
             if (existingUser) {
+                if (!existingUser.password) {
+                    return null;
+                }
                 const passwordValidation = await bcrypt.compare(credentials.password, existingUser.password);
                 if (passwordValidation) {
                     return {
@@ -51,10 +55,44 @@ export const authOptions = {
 
             return null
           },
-        })
+        }),
+      GoogleProvider({
+          clientId: process.env.GOOGLE_CLIENT_ID || "",
+          clientSecret: process.env.GOOGLE_CLIENT_SECRET || ""
+      })
     ],
     secret: process.env.JWT_SECRET || "secret",
     callbacks: {
+        // Google sign-ins don't go through authorize(), so ensure a
+        // User row exists for them here, matched by email.
+        async signIn({ user, account }: any) {
+            if (account?.provider === "google") {
+                if (!user.email) {
+                    return false;
+                }
+                await db.user.upsert({
+                    where: { email: user.email },
+                    update: {},
+                    create: {
+                        email: user.email,
+                        name: user.name,
+                    }
+                });
+            }
+            return true;
+        },
+        // Make session.user.id the Postgres User.id for every
+        // provider, not just credentials (Google's default id is its
+        // own account id, not our row id).
+        async jwt({ token, user, account }: any) {
+            if (account?.provider === "google" && user?.email) {
+                const dbUser = await db.user.findFirst({ where: { email: user.email } });
+                if (dbUser) {
+                    token.sub = dbUser.id.toString();
+                }
+            }
+            return token;
+        },
         // TODO: can u fix the type here? Using any is bad
         async session({ token, session }: any) {
             session.user.id = token.sub
@@ -63,4 +101,3 @@ export const authOptions = {
         }
     }
   }
- 

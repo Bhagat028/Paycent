@@ -12,8 +12,8 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
-    "react": "19.2.8",
-    "recoil": "^0.7.7"
+    "jotai": "^3.0.0",
+    "react": "19.2.8"
   },
   "devDependencies": {
     "@repo/eslint-config": "*",
