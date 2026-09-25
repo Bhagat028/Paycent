@@ -1,13 +1,12 @@
-import {PrismaClient} from "@repo/db/client"
-import Balance from "./component/Balance"
+import { getServerSession } from "next-auth";
+import { redirect } from 'next/navigation'
+import { authOptions } from "./lib/auth";
 
-const client = new PrismaClient()
-
-export default function Home() {
-  return (
-    <div className="text-2xl flex flex-col gap-6 p-6">
-      hi there
-      <Balance />
-    </div>
-  );
+export default async function Page() {
+  const session = await getServerSession(authOptions);
+  if (session?.user) {
+    redirect('/dashboard')
+  } else {
+    redirect('/api/auth/signin')
+  }
 }
