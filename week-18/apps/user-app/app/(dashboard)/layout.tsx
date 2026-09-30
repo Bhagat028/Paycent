@@ -1,16 +1,25 @@
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 import { SidebarItem } from "../component/Sidebar";
+import { authOptions } from "../lib/auth";
 
-export default function Layout({
+export default async function Layout({
   children,
 }: {
   children: React.ReactNode;
-}): React.ReactNode {
+}): Promise<React.ReactNode> {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) {
+    redirect("/api/auth/signin");
+  }
+
   return <div className="flex">
     <div className="w-72 shrink-0 border-r border-slate-300 min-h-screen mr-4 pt-28 px-4">
       <div>
         <SidebarItem href={"/dashboard"} icon={<HomeIcon />} title="Home" />
         <SidebarItem href={"/transfer"} icon={<TransferIcon />} title="Transfer" />
         <SidebarItem href={"/transactions"} icon={<TransactionsIcon />} title="Transactions" />
+        <SidebarItem href={"/p2p"} icon={<P2PTransferIcon />} title="P2P Transactions" />
       </div>
     </div>
     {children}
@@ -35,3 +44,8 @@ function TransactionsIcon() {
   </svg>
   
 }
+function P2PTransferIcon() {
+    return <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+      <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25" />
+    </svg>
+  }

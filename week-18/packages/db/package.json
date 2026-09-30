@@ -9,6 +9,7 @@
     "generate": "prisma generate",
     "migrate:dev": "prisma migrate dev",
     "studio": "prisma studio",
+    "seed": "prisma db seed",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

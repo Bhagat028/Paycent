@@ -1,0 +1,31 @@
+name: Build on PR
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      # prisma.config.ts throws if this is unset; generate/build don't connect to it
+      DATABASE_URL: postgresql://user:pass@localhost:5432/db
+    defaults:
+      run:
+        working-directory: week-18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+          cache-dependency-path: week-18/package-lock.json
+      - name: Use npm 10.9.8 (pinned by devEngines)
+        run: npm install -g npm@10.9.8
+      - name: Install dependencies
+        run: npm ci
+      - name: Generate Prisma client
+        run: npm run generate --workspace=@repo/db
+      - name: Run Build
+        run: npm run build

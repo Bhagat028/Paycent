@@ -1,0 +1,24 @@
+FROM node:24-alpine
+
+WORKDIR /usr/src/app
+
+# package.json devEngines pins npm 10.9.8; node:24 ships npm 11
+RUN npm install -g npm@10.9.8
+
+COPY package.json package-lock.json turbo.json ./
+
+COPY apps ./apps
+COPY packages ./packages
+
+# Install dependencies
+RUN npm install
+
+# prisma.config.ts throws without DATABASE_URL; generate doesn't connect to it
+ARG DATABASE_URL=postgresql://user:pass@localhost:5432/db
+RUN npm run db:generate
+
+# No build step: the webhook handler runs TypeScript directly with tsx
+
+EXPOSE 3003
+
+CMD ["npm", "run", "start-webhook"]
